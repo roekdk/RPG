@@ -28,29 +28,43 @@ namespace ConsoleApp2
                         {
                             Welcom();
                             action = int.Parse(Console.ReadLine());
+                            Console.Clear();
                             break;
                         }
                     case 1:
-                        {
-                            Console.Clear();
+                        {                            
                             ViewStatus();
                             action2 = int.Parse(Console.ReadLine());
+                            Console.Clear();
                             ActionCheck();
                             break;
                         }
                     case 2:
-                        {
-                            Console.Clear();
+                        {                            
                             ViewInventory();
                             action2 = int.Parse(Console.ReadLine());
+                            Console.Clear();
                             ActionCheck();
                             break;
                         }
                     case 3:
-                        {
-                            Console.Clear();
-                            ViewShop();
+                        {                           
+                            Shop();
+                            break;
+                        }
+                    case 4:
+                        {                            
+                            ViewDungeon();
                             action2 = int.Parse(Console.ReadLine());
+                            Console.Clear();
+                            ActionCheck();
+                            break;
+                        }
+                    case 5:
+                        {                            
+                            ViewINN();
+                            action2 = int.Parse(Console.ReadLine());
+                            Console.Clear();
                             ActionCheck();
                             break;
                         }
@@ -71,6 +85,8 @@ namespace ConsoleApp2
                 Console.WriteLine("1. 상태 보기");
                 Console.WriteLine("2. 인벤토리");
                 Console.WriteLine("3. 상점");
+                Console.WriteLine("4. 던전입장");
+                Console.WriteLine("5. 휴식하기");
                 Console.WriteLine("");
                 Console.WriteLine("원하는 행동 입력");
                 Console.Write(">>");
@@ -98,22 +114,71 @@ namespace ConsoleApp2
                 Console.WriteLine("");
                 Console.Write(">>");
             }
-            void ViewShop()
-            {
-                Shop();
+            //void ViewShop()
+            //{
+            //    Shop();                
+            //}
+            void ViewDungeon() 
+            {   
+                Console.WriteLine("4. 던전입장");
+                Console.WriteLine("");
+                Console.WriteLine("1. 쉬운 던전     | 방어력 5 이상 권장");
+                Console.WriteLine("2. 일반 던전     | 방어력 11 이상 권장");
+                Console.WriteLine("3. 어려운 던전     | 방어력 17 이상 권장");
                 Console.WriteLine("");
                 Console.WriteLine("0. 나가기");
                 Console.WriteLine("");
                 Console.Write(">>");
             }
+            void ViewINN()
+            {
+                Console.WriteLine("5. 휴식하기");
+                Console.WriteLine("");
+                Console.Write("500 G 를 내면 체력을 회복할 수 있습니다.   ");
+                Console.WriteLine($"(보유골드: {me.Gold})");
+                Console.WriteLine($"(체력: {me.HealthPoint})");
+                Console.WriteLine("");
+                Console.WriteLine("1. 휴식하기");
+                Console.WriteLine("0. 나가기");
+                Console.WriteLine("");
+                Console.Write(">>");
+            }
+
+
             void ActionCheck()
             {
                 while (true)
                 {
-                    if (action == 2 && action2 == 1)
+                    if (action == 2 && action2 == 1) //2.인벤토리 && 1선택
                     {
                         Console.Clear();
                         ItemNumbering();
+                        break;
+                    }
+                    else if (action == 5 && action2 == 1) //5.휴식하기 && 1선택
+                    {
+                        INN();                        
+                        break;
+                    }
+                    else if (action == 4 && action2 == 1) //4.던전가기 && 1선택
+                    {
+                        action2 = 0;
+                        Console.Write("1. 쉬운 던전");
+                        Dungeon(0);                        
+                        break;
+                    }
+                    else if (action == 4 && action2 == 2) //4.던전가기 && 2선택
+                    {
+                        action2 = 0;
+                        Console.Write("2. 일반 던전");
+                        Dungeon(1);                        
+                        break;
+                    }
+                    else if (action == 4 && action2 == 3) //4.던전가기 && 3선택
+                    {
+                        action2 = 0;
+                        Console.Write("3. 어려운 던전");
+                        Dungeon(2);
                         break;
                     }
                     else if (action2 != 0)
@@ -122,7 +187,6 @@ namespace ConsoleApp2
                         Console.Write(">>");
                         action2 = int.Parse(Console.ReadLine());
                     }
-
                     else
                     {
                         action = 0;
@@ -136,20 +200,43 @@ namespace ConsoleApp2
             {
                 me.Job = "전사";
                 me.Level = 1;
+                me.Exp = 0; //경험치 == 던전클리어 횟수저장
                 me.Power = 10;
+                me.TemPower = 0;//장비로 증가될 양
                 me.Defense = 5;
-                me.HealthPoint = 100;
-                me.Gold = 1500;
+                me.TemDefense = 0;//장비로 증가될 양
+                me.HealthPoint = 50; //현재체력
+                me.MaxHealthPoint = 100; //최대체력
+                me.Gold = 1500;               
+            }
+            void TemStatus()  //장비 업데이트용
+            {
+                for (int i = 0; i < list.Count; i++)
+                {
+                    if (list[i].Equipment == "무기" && list[i].IsEquipment)
+                    {
+                        me.Weapon = list[i].Name;
+                        me.TemPower = list[i].ItemValue;
+                    }
+                    else if (list[i].Equipment == "장비" && list[i].IsEquipment)
+                    {
+                        me.Equipment = list[i].Name;
+                        me.TemDefense = list[i].ItemValue;
+                    }
+                }
             }
 
-            void StatusChack() 
+            void StatusChack() //스텟 표현
             {
-                Console.WriteLine($"L v . [ {me.Level} ]");
+                Console.Write($"L v . [ {me.Level} ]  ");
+                Console.WriteLine($"EXP . [ {me.Exp} ]");
                 Console.WriteLine($"Chad ( {me.Job} )");
-                Console.WriteLine($"공격력: {me.Power}");
-                Console.WriteLine($"방어력: {me.Defense}");
-                Console.WriteLine($"체 력 : {me.HealthPoint}");
+                Console.WriteLine($"공격력: {me.Power} + {me.TemPower}");
+                Console.WriteLine($"방어력: {me.Defense} + {me.TemDefense}");
+                Console.WriteLine($"체 력 : {me.HealthPoint} / {me.MaxHealthPoint}");
                 Console.WriteLine($"Gold : {me.Gold}");
+                Console.WriteLine($"무기 : {me.Weapon}");
+                Console.WriteLine($"장비 : {me.Equipment}");
             }
 
             void ItemInitialize() //인게임모든 아이템구현
@@ -184,7 +271,7 @@ namespace ConsoleApp2
                     {
                         string isEquipment = list[i].IsEquipment ? "E" : "X";
 
-                        if (list[i].IsBuy == true)
+                        if (list[i].IsBuy == true && list[i].Equipment!="무역")
                         {
                             list[i].Num = i;
                             Console.WriteLine($"{i + 1} [{isEquipment}]{list[i].Name} | {list[i].Equipment} | {list[i].Type} +{list[i].ItemValue} | {list[i].Info} ");
@@ -199,16 +286,23 @@ namespace ConsoleApp2
                         action2 = 0;
                         ActionCheck();
                         break;
-                    }                    
-                    for (int i = 0; i < list.Count; i++)
-                    {
-                        if (list[choice - 1].Name!=list[choice - 1].Name && list[choice - 1].Equipment == list[i].Equipment && list[i].IsEquipment)
-                        {                            
-                                list[i].IsEquipment = !list[i].IsEquipment;
-                        }
                     }
+                    //for (int i = 0; i < list.Count; i++)
+                    //{
+                    //    if (list[choice - 1].Equipment == list[i].Equipment && list[i].IsEquipment) //선택장비와 가진장비의 장비부위가 같고 && 착용중이라면
+                    //    {
+                    //        list[i].IsEquipment = !list[i].IsEquipment; //벗어
+                    //        list[choice - 1].IsEquipment = !list[choice - 1].IsEquipment; //선택장비 착용 혹은 벗기
+                    //        break;
+                    //    }
+                    //    else if (list[choice - 1].IsEquipment|| !list[choice - 1].IsEquipment) //선택장비를 입고잇다면
+                    //    {
+                    //        list[choice - 1].IsEquipment = !list[choice - 1].IsEquipment; //선택장비 착용 혹은 벗기
+                    //        break;
+                    //    }
+                    //}
                     list[choice - 1].IsEquipment = !list[choice - 1].IsEquipment;
-
+                    TemStatus();
                     //Console.WriteLine("착용 할수 없습니다");
                 }
             }
@@ -242,9 +336,9 @@ namespace ConsoleApp2
                     int ShopTap = int.Parse(Console.ReadLine());
                     if (ShopTap == 0)
                     {
-                        action2 = 0;
-                        Console.Clear();
-                        ActionCheck();
+                        action2 = 0;                        
+                        ActionCheck();                        
+                        break;
                     }
                     else if (ShopTap == 1)
                     {
@@ -322,20 +416,100 @@ namespace ConsoleApp2
                         break;
                     }
                     list[shopChoice - 1].IsBuy = !list[shopChoice - 1].IsBuy;
-                    list[shopChoice - 1].IsEquipment = !list[shopChoice - 1].IsEquipment;
-                    me.Gold = me.Gold + (int)(list[shopChoice - 1].Price * 0.85f);
+                    if(list[shopChoice - 1].IsEquipment) 
+                    {
+                        list[shopChoice - 1].IsEquipment = !list[shopChoice - 1].IsEquipment;
+                    }                    
+                    me.Gold += (int)(list[shopChoice - 1].Price * 0.85f);
                     Console.Clear();
                 }
+            }
+
+            void Dungeon(int _num) 
+            {
+                int num = _num; //난이도
+                int DunDefense = 0; //던전 권장방어력
+                int DunReward = 0; //던전 보상
+                int youDefense = me.Defense + me.TemDefense;  // 내방어력
+                float youPower = me.Power + me.TemPower;// 내공격력                                     // 
+                int rand1 = new Random().Next(20,36);
+                int rand2 = new Random().Next(0, 5); //40퍼 확률
+                int rand3 = new Random().Next((int)youPower, (int)youPower *2);// 공격력~공격력* 2 
+
+                switch (num)
+                {
+                    case 0:
+                        {
+                            DunDefense = 5;
+                            DunReward = 1000;
+                            break;
+                        }
+                    case 1:
+                        {
+                            DunDefense = 11;
+                            DunReward = 1700;
+                            break;
+                        }
+                    case 2:
+                        {
+                            DunDefense = 17;
+                            DunReward = 2500;
+                            break;
+                        }
+                }
+                if (youDefense < DunDefense && rand2 < 2)//방어력미달 && 40%걸림
+                {
+                    me.HealthPoint -= (int)(me.HealthPoint * 0.5f);
+                    Console.Write(" 실패 ");
+                }
+                else //던전 클리어
+                {
+                    Console.WriteLine(" 성공 ");
+                    youDefense -= DunDefense;
+                    me.HealthPoint -= rand1 - youDefense;
+                    me.Gold += DunReward+ (int)(DunReward*(rand3 * 0.01f));
+                    me.Exp ++;
+                }
+                if (me.Level <= 5 && me.Exp==me.Level) //랩업!
+                {
+                    Console.WriteLine(" 랩업 ");
+                    me.Level++;
+                    me.Exp = 0;
+                    me.MaxHealthPoint += 10;
+                    me.Power += 0.5f;
+                    me.Defense += 1;
+                }
+            }
+            void INN()
+            {                
+                if (me.Gold >= 500) 
+                {
+                    me.HealthPoint += 100;
+                    me.Gold -= 500;
+                    if (me.HealthPoint > me.MaxHealthPoint)
+                    {
+                        me.HealthPoint = me.MaxHealthPoint;
+                    }                    
+                    Console.WriteLine("회복 되었습니다");
+                }
+                else { Console.WriteLine("골드가 모자랍니다"); }
+                
             }
         }
         class Character
         {
             private string job;
             private int level;
-            private int power;
+            private int exp;
+            private float power;
+            private int temPower;
             private int defense;
+            private int temDefense;
             private int healthPoint;
+            private int maxHealthPoint;
             private int gold;
+            private string weapon;
+            private string equipment;
             public string Job
             {
                 get { return job; }
@@ -346,25 +520,55 @@ namespace ConsoleApp2
                 get { return level; }
                 set { level = value; }
             }
-            public int Power
+            public int Exp
+            {
+                get { return exp; }
+                set { exp = value; }
+            }
+            public float Power
             {
                 get { return power; }
                 set { power = value; }
+            }
+            public int TemPower
+            {
+                get { return temPower; }
+                set { temPower = value; }
             }
             public int Defense
             {
                 get { return defense; }
                 set { defense = value; }
             }
+            public int TemDefense
+            {
+                get { return temDefense; }
+                set { temDefense = value; }
+            }
             public int HealthPoint
             {
                 get { return healthPoint; }
                 set { healthPoint = value; }
             }
+            public int MaxHealthPoint
+            {
+                get { return maxHealthPoint; }
+                set { maxHealthPoint = value; }
+            }
             public int Gold
             {
                 get { return gold; }
                 set { gold = value; }
+            }
+            public string Weapon
+            {
+                get { return weapon; }
+                set { weapon = value; }
+            }
+            public string Equipment
+            {
+                get { return equipment; }
+                set { equipment = value; }
             }
         }
         class Item
@@ -378,7 +582,6 @@ namespace ConsoleApp2
             private string info;
             private int price;
             private bool isBuy;
-
 
             public Item(int _num, string _itemName, string _equipment, bool _isEquipment, string _type, int _itemValue, string _info, int _price,bool _isBuy) 
             {
@@ -437,7 +640,6 @@ namespace ConsoleApp2
                 get { return isBuy; }
                 set { isBuy = value; }
             }
-
         }
     }
 }   
