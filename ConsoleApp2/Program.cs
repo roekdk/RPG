@@ -113,11 +113,7 @@ namespace ConsoleApp2
                 Console.WriteLine("0. 나가기");
                 Console.WriteLine("");
                 Console.Write(">>");
-            }
-            //void ViewShop()
-            //{
-            //    Shop();                
-            //}
+            }            
             void ViewDungeon() 
             {   
                 Console.WriteLine("4. 던전입장");
@@ -143,7 +139,6 @@ namespace ConsoleApp2
                 Console.WriteLine("");
                 Console.Write(">>");
             }
-
 
             void ActionCheck()
             {
@@ -249,8 +244,8 @@ namespace ConsoleApp2
                 list.Add(new Item(6,"스파르타의 갑옷", "장비", false, "방어력", 15, "스파르타의 전사들이 사용했다는 전설의 갑옷입니다.", 3500, false));
                 list.Add(new Item(7,"구매테스트용", "무역", false, "방어력", 1, "무역품.", 100, false));
                 list.Add(new Item(8,"판매테스트용", "무역", false, "방어력", 1, "무역품.", 100, true));
-
             }
+
             void Inventory() //내가 가진것 
             {                
                 for (int i = 0; i < list.Count; i++)
@@ -262,6 +257,7 @@ namespace ConsoleApp2
                     }
                 }
             }
+
             void ItemNumbering() //장착하기 시 나옴
             {
                 while (true)
@@ -287,23 +283,26 @@ namespace ConsoleApp2
                         ActionCheck();
                         break;
                     }
-                    //for (int i = 0; i < list.Count; i++)
-                    //{
-                    //    if (list[choice - 1].Equipment == list[i].Equipment && list[i].IsEquipment) //선택장비와 가진장비의 장비부위가 같고 && 착용중이라면
-                    //    {
-                    //        list[i].IsEquipment = !list[i].IsEquipment; //벗어
-                    //        list[choice - 1].IsEquipment = !list[choice - 1].IsEquipment; //선택장비 착용 혹은 벗기
-                    //        break;
-                    //    }
-                    //    else if (list[choice - 1].IsEquipment|| !list[choice - 1].IsEquipment) //선택장비를 입고잇다면
-                    //    {
-                    //        list[choice - 1].IsEquipment = !list[choice - 1].IsEquipment; //선택장비 착용 혹은 벗기
-                    //        break;
-                    //    }
-                    //}
+
                     list[choice - 1].IsEquipment = !list[choice - 1].IsEquipment;
+
+                    foreach (Item i in list) 
+                    {
+                        if (list[choice - 1] != i) //선택장비와 같은것 열외
+                        {
+                            if (list[choice - 1].Equipment == i.Equipment) //같은종류의 장비
+                            {
+                                if (list[choice - 1].IsEquipment) //선택장비 착용시
+                                {
+                                    if (i.IsEquipment) //착용장비
+                                    {
+                                        i.IsEquipment = false;
+                                    }
+                                }
+                            }
+                        }
+                    }
                     TemStatus();
-                    //Console.WriteLine("착용 할수 없습니다");
                 }
             }
 
@@ -336,8 +335,8 @@ namespace ConsoleApp2
                     int ShopTap = int.Parse(Console.ReadLine());
                     if (ShopTap == 0)
                     {
-                        action2 = 0;                        
-                        ActionCheck();                        
+                        action2 = 0; 
+                        ActionCheck();
                         break;
                     }
                     else if (ShopTap == 1)
@@ -498,7 +497,7 @@ namespace ConsoleApp2
         }
         class Character
         {
-            private string job;
+            private string job; //직업
             private int level;
             private int exp;
             private float power;
@@ -588,14 +587,14 @@ namespace ConsoleApp2
                 num= _num; //장비 번호
                 name = _itemName; //장비이름
                 isEquipment = _isEquipment; //장비 착용여부
-                equipment = _equipment; //장비 장착 부위(1.무기,2.장비...3.소모품?)
+                equipment = _equipment; //장비 장착 부위(무기,장비...소모품?)
                 type = _type;  //아이템 능력(공격역,방어력)
                 itemValue = _itemValue; // 아이템능력치
                 info = _info;   // 소개
                 price = _price; //가격
                 isBuy = _isBuy; //구매 여부
             }
-            public int Num
+            public int Num //장비 번호(구현해봣는데 안됨..)
             {
                 get { return num; }
                 set { num = value; }
@@ -610,7 +609,7 @@ namespace ConsoleApp2
                 get { return isEquipment; }
                 set { isEquipment = value; }
             }
-            public string Equipment
+            public string Equipment 
             {
                 get { return equipment; }
                 set { equipment = value; }
