@@ -32,7 +32,7 @@ namespace ConsoleApp2
                             break;
                         }
                     case 1:
-                        {                            
+                        {
                             ViewStatus();
                             action2 = int.Parse(Console.ReadLine());
                             Console.Clear();
@@ -236,14 +236,14 @@ namespace ConsoleApp2
 
             void ItemInitialize() //인게임모든 아이템구현
             {
-                list.Add(new Item(1,"낡은 검    ","무기", false, "공격력", 2, "쉽게 볼 수 있는 낡은 검 입니다.", 100, true));
-                list.Add(new Item(2,"청동 도끼  ", "무기", false, "공격력", 5, "쉽게 볼 수 있는 낡은 검 입니다.", 100, false));
-                list.Add(new Item(3,"스파르타의 창", "무기", true, "공격력", 7, "스파르타의 전사들이 사용했다는 전설의 창입니다.", 3500, true));
-                list.Add(new Item(4,"수련자 갑옷 ", "장비", false, "방어력", 5, "수련에 도움을 주는 갑옷입니다.", 1000, false));
-                list.Add(new Item(5,"무쇠갑옷    ", "장비", true, "방어력", 9, "무쇠로 만들어져 튼튼한 갑옷입니다.", 2000, true));
-                list.Add(new Item(6,"스파르타의 갑옷", "장비", false, "방어력", 15, "스파르타의 전사들이 사용했다는 전설의 갑옷입니다.", 3500, false));
-                list.Add(new Item(7,"구매테스트용", "무역", false, "방어력", 1, "무역품.", 100, false));
-                list.Add(new Item(8,"판매테스트용", "무역", false, "방어력", 1, "무역품.", 100, true));
+                list.Add(new Item(1,"낡은 검    ","무기", false, "공격력", 2, "낡은 검 입니다.", 100, true));
+                list.Add(new Item(2,"청동 도끼  ", "무기", false, "공격력", 5, "청동 도끼 입니다.", 100, false));
+                list.Add(new Item(3,"스파르타의 창", "무기", true, "공격력", 7, "전설의 창입니다.", 3500, true));
+                list.Add(new Item(4,"수련자 갑옷 ", "장비", false, "방어력", 5, "수련용 갑옷입니다.", 1000, false));
+                list.Add(new Item(5,"무쇠갑옷    ", "장비", true, "방어력", 9, "튼튼한 갑옷입니다.", 2000, true));
+                list.Add(new Item(6,"스파르타의 갑옷", "장비", false, "방어력", 15, "전설의 갑옷입니다.", 3500, false));
+                list.Add(new Item(7,"구매 테스트용", "무역", false, "방어력", 1, "무역품.", 100, false));
+                list.Add(new Item(8,"판매 테스트용", "무역", false, "방어력", 1, "무역품.", 100, true));
             }
 
             void Inventory() //내가 가진것 
@@ -286,7 +286,7 @@ namespace ConsoleApp2
 
                     list[choice - 1].IsEquipment = !list[choice - 1].IsEquipment;
 
-                    foreach (Item i in list) 
+                    foreach (Item i in list) //리스트내에 모든 Item 자료를 i로 불러온다
                     {
                         if (list[choice - 1] != i) //선택장비와 같은것 열외
                         {
@@ -418,7 +418,7 @@ namespace ConsoleApp2
                     if(list[shopChoice - 1].IsEquipment) 
                     {
                         list[shopChoice - 1].IsEquipment = !list[shopChoice - 1].IsEquipment;
-                    }                    
+                    } 
                     me.Gold += (int)(list[shopChoice - 1].Price * 0.85f);
                     Console.Clear();
                 }
@@ -430,8 +430,8 @@ namespace ConsoleApp2
                 int DunDefense = 0; //던전 권장방어력
                 int DunReward = 0; //던전 보상
                 int youDefense = me.Defense + me.TemDefense;  // 내방어력
-                float youPower = me.Power + me.TemPower;// 내공격력                                     // 
-                int rand1 = new Random().Next(20,36);
+                float youPower = me.Power + me.TemPower;// 내공격력
+                int rand1 = new Random().Next(20,36); 
                 int rand2 = new Random().Next(0, 5); //40퍼 확률
                 int rand3 = new Random().Next((int)youPower, (int)youPower *2);// 공격력~공격력* 2 
 
